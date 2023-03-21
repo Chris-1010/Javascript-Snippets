@@ -1,0 +1,764 @@
+let canvas;
+let context;
+
+let now;
+let fpsInterval = 10;  // 60fps
+let then = Date.now();
+
+document.addEventListener("DOMContentLoaded", init, false)
+
+
+
+
+
+
+function init() {
+
+
+    canvas = document.querySelector("canvas");  // Looks for the tag 'canvas'
+    context = canvas.getContext("2d");
+
+    let buttons = document.querySelectorAll("button");
+    for (let button of buttons) {
+    button.addEventListener("click", start, false);
+    }
+    window.addEventListener("keydown", start, false);
+
+}
+
+
+function start(event) {
+    
+    let key;
+    console.log(event);
+    if (event.type == "keydown") {
+        console.log("It was a keypush that activated me")
+        key = event.key;
+    }
+    else if (event.type == "click") {
+        console.log("A button was clicked")
+        key = event.target.id;
+        if (key === "slower_fps" || key === "faster_fps") {
+            shift_fps(key);
+        }
+    }
+
+
+    if (key === "1") {
+        first();
+        removeEventListener("keydown", start, false)
+    }
+    else if (key === "2") {
+        second();
+        removeEventListener("keydown", start, false)
+    }
+    else if (key === "3") {
+        third();
+        removeEventListener("keydown", start, false)
+    }
+    else if (key === "4") {
+        fourth();
+        removeEventListener("keydown", start, false)
+    }
+    else if (key === "5") {
+        fifth();
+        removeEventListener("keydown", start, false)
+    }
+    else if (key === "6") {
+        sixth();
+        removeEventListener("keydown", start, false)
+    }
+
+}
+
+
+function shift_fps(key) {
+    if (key === "faster_fps") {
+        fpsInterval -= 10;
+    }
+    else if (key === "slower_fps") {
+        fpsInterval += 10;
+    }
+    console.log("Current FPS Interval: " + fpsInterval)
+}
+
+
+
+
+
+function first() {
+    // Lab 6
+    let background_audio = new Audio("/Audio/Raving_Rabbids_OST.mp3");
+    background_audio.play();
+    console.log("Playing background_audio");
+
+    let x;
+    let y;
+    let size;
+    let xChange;
+    let yChange;
+
+    x = canvas.width / 2;
+    y = canvas.height / 2;
+    size = 9;
+    xChange = size + 1;
+    yChange = size;
+    fpsInterval = 50;
+
+    let inputs = document.createElement("section");
+    inputs.setAttribute("id", "inputs");
+    inputs.style.cssText = "display:flex;justify-content:space-around;grid-row:4;grid-column:2;margin-top:5%;"
+    let size_field = document.createElement("input");
+    let xChange_field = document.createElement("input");
+    let yChange_field = document.createElement("input");
+    let color_field = document.createElement("input");
+    let body = document.querySelector("body");
+    body.appendChild(inputs);
+    inputs.appendChild(size_field);
+    inputs.appendChild(xChange_field);
+    inputs.appendChild(yChange_field);
+    inputs.appendChild(color_field);
+    let fields = document.querySelectorAll("input");
+    for (let field of fields) {
+        field.style.cssText = "border-radius:400px;height:fit-content;padding:1% 2%;text-align:center;font-size:200%;"
+        if (field === size_field) {
+            field.setAttribute("placeholder", "Size");
+          } else if (field === xChange_field) {
+            field.setAttribute("placeholder", "X Change");
+          } else if (field === yChange_field) {
+            field.setAttribute("placeholder", "Y Change");
+          } else if (field === color_field) {
+            field.setAttribute("placeholder", "Colour");
+          }
+    }
+
+     
+
+    draw();
+
+    function draw() {
+    window.requestAnimationFrame(draw);
+    let now = Date.now();
+    let elapsed = now - then;
+    if (elapsed <= fpsInterval) {
+        return;
+    }
+    then = now - (elapsed % fpsInterval);
+
+    // Reading values from input fields
+    size_field.addEventListener("input", debounce(function() {
+        size = parseInt(size_field.value);
+      }, 600));
+      
+    xChange_field.addEventListener("input", debounce(function() {
+        xChange = parseInt(xChange_field.value);
+      }, 600));
+      
+    yChange_field.addEventListener("input", debounce(function() {
+        yChange = parseInt(yChange_field.value);
+      }, 600));
+
+    color_field.addEventListener("input", debounce(function() {
+        let colorValue = color_field.value.toLowerCase();
+        let validColors = [
+            "red",
+            "blue",
+            "green",
+            "yellow",
+            "orange",
+            "purple",
+            "pink",
+            "brown",
+            "grey",
+            "black",
+            "white",
+            "maroon",
+            "navy",
+            "gold",
+            "violet",
+            "indigo",
+            "cyan"
+        ];
+        if (validColors.includes(colorValue)) {
+            context.fillStyle = colorValue;
+        }
+        else {
+            context.fillStyle = "white";
+        }
+    }, 600));
+ 
+    
+    context.fillRect(x, y, size, size);
+    // context.clearRect(0, 0, canvas.width, canvas.height);
+    x += xChange;
+    y += yChange;
+
+    if ((y + size + size) >= canvas.height || y <= 0) {
+        yChange = yChange * -1
+        }
+    
+
+    else if ((x + size) >= canvas.width || x <= 0) {
+        xChange = -1 * xChange
+        }
+
+}
+}
+
+function second() {
+    // Adapted from Lecture of 28 Feb / 3 March
+    let background_audio = new Audio("/Audio/Follow Your Face.mp3");
+    background_audio.play();
+    console.log("Playing background_audio");
+
+    let x;
+    let y;
+    let size;
+    let xChange;
+    let yChange;    
+    let particles = [];
+    fpsInterval = 50;
+
+    let inputs = document.createElement("section");
+    inputs.setAttribute("id", "inputs");
+    inputs.style.cssText = "display:flex;justify-content:space-around;grid-row:4;grid-column:2;margin-top:5%;"
+    let variation_field = document.createElement("input");
+    let particle_count_field = document.createElement("input");
+    let body = document.querySelector("body");
+    body.appendChild(inputs);
+    inputs.appendChild(variation_field);
+    inputs.appendChild(particle_count_field);
+    variation_field.style.cssText = "border-radius:400px;height:fit-content;padding:1% 2%;text-align:center;font-size:200%;"
+    variation_field.setAttribute("title", "Variation")
+    variation_field.setAttribute("type", "range")
+    variation_field.setAttribute("min", "1")
+    variation_field.setAttribute("max", "4")
+    variation_field.setAttribute("value", "1")
+    particle_count_field.setAttribute("title", "Particles")
+    particle_count_field.setAttribute("type", "range")
+    particle_count_field.setAttribute("min", "1")
+    particle_count_field.setAttribute("max", "40")
+    particle_count_field.setAttribute("value", "1")
+
+    let variation = 1;  // Must initialize these two as they are changed inside the debounce function
+    let particle_count = 1;
+    let p;
+
+    draw();
+
+    function draw() {
+        window.requestAnimationFrame(draw);
+        x = canvas.width / 2;
+        y = canvas.height / 2;
+        size = 12;
+        xChange = size;
+        yChange = size;
+
+        let now = Date.now();
+        let elapsed = now - then;
+        if (elapsed <= fpsInterval) {
+            return;
+        }
+        then = now - (elapsed % fpsInterval);
+
+
+
+
+        variation_field.addEventListener("input", debounce(function() {
+            variation = parseInt(variation_field.value);
+          }, 600));
+        particle_count_field.addEventListener("input", debounce(function() {
+            particle_count = parseInt(particle_count_field.value);
+        }, 600));
+        for (let i = 0; i < particle_count; i += 1) { /* controlling the amount of particles spewing out at once */
+        
+            if (variation === 1) {
+                p = {
+                
+                // Jumping sparks from center
+                x : x,
+                y : y,
+                color : "#ff" + randint(0,9),
+                size : 2,
+                xChange : randint(-5, 5),
+                yChange : randint(-15, 0)
+                }
+            }
+            else if (variation === 2) {
+                p = {
+
+                // Hose from side of screen
+                x : 0,
+                y : y,
+                color : "#ff" + randint(0,9),
+                size : 2,
+                xChange : randint(5, canvas.width / 20),
+                yChange : randint(-15, 0)
+                }
+            }
+
+            else if (variation === 3) {
+                p = {
+            
+                // Raining
+                x : randint(0,canvas.width),
+                y : 0,
+                color : "#ff" + randint(0,9),
+                size : 2,
+                xChange : randint(-5, 5),
+                yChange : randint(-15, 0)
+                }
+            }
+
+            else if (variation === 4) {
+                p = {
+
+                // Sparks from bottom left corner 
+                x : -5,
+                y : canvas.height,
+                color : "#ff" + randint(0,9),
+                size : 2,
+                xChange : randint(5, canvas.width / 30),
+                yChange : randint(-20, 0)
+            }
+        }
+            particles.push(p);
+        }
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        
+
+        for (let p of particles) {
+            context.fillStyle = p.color;
+            context.fillRect(p.x, p.y, p.size, p.size);
+        }
+
+        for (let p of particles) {
+            p.x += p.xChange;
+            p.y += p.yChange;
+            // GRAVITY:
+            p.yChange += 1.5;
+        }
+}
+}
+
+function third() {
+    // Adapted from lecture of 7 March
+    let background_audio = new Audio("/Audio/Arriba Amoeba!.mp3");
+    background_audio.play();
+    console.log("Playing background_audio");
+
+
+    /* MOBILE INTEGRATION */
+    
+    let controls_button = document.querySelector("#controls")
+    if (!controls_button) { /* if not controls_button,         ! == not               */
+    let button;
+    let directions = {
+        1:"up",
+        2:"left",
+        3:"right",
+        4:"down"
+    };
+
+    let controls = document.createElement("section");
+    controls.setAttribute("id", "controls")
+    controls.style.cssText = "position:absolute;display:grid;grid-template-columns:0.8fr 1fr 0.8fr;grid-template-rows:1fr 2fr 1fr;width:100vw;height:100vh;"
+
+    document.querySelector("body").appendChild(controls);
+    for (let i = 1; i < 5; i += 1) {
+    button = document.createElement("button");
+    controls.appendChild(button);
+    button.setAttribute("id", directions[i]);  /* Not actually indexing it here. Must do it this way instead of dot notation (directions.i) */
+    }
+    let common_styles = "justify-self:center;width:50%;"
+    document.getElementById("up").style.cssText = ("grid-column:2;grid-row:1;" + common_styles)
+    document.getElementById("left").style.cssText = ("grid-column:1;grid-row:2;" + common_styles)
+    document.getElementById("right").style.cssText = ("grid-column:3;grid-row:2;" + common_styles)
+    document.getElementById("down").style.cssText = ("grid-column:2;grid-row:3;" + common_styles)
+
+}
+
+let moveRightButton = document.getElementById("right");
+let moveLeftButton = document.getElementById("left");
+let moveUpButton = document.getElementById("up");
+let moveDownButton = document.getElementById("down");
+
+
+moveRightButton.addEventListener("touchstart", function() {
+    moveRight = true;
+});
+    
+moveRightButton.addEventListener("touchend", function() {
+    moveRight = false;
+});
+    
+moveLeftButton.addEventListener("touchstart", function() {
+    moveLeft = true;
+});
+    
+moveLeftButton.addEventListener("touchend", function() {
+    moveLeft = false;
+});
+    
+moveUpButton.addEventListener("touchstart", function() {
+    moveUp = true;
+});
+    
+moveUpButton.addEventListener("touchend", function() {
+    moveUp = false;
+});
+    
+moveDownButton.addEventListener("touchstart", function() {
+    moveDown = true;
+});
+    
+moveDownButton.addEventListener("touchend", function() {
+    moveDown = false;
+});
+
+
+    let animation;
+    let asteroids = [];
+    let player = {
+        x : 0,
+        y : canvas.height / 2,
+        size : 10,
+        xChange : 5,
+        yChange : 5
+    }
+    let moveLeft = false;
+    let moveRight = false;
+    let moveUp = false;
+    let moveDown = false;
+    let win_audio = new Audio("/Audio/Chan Chan.mp3");
+    let lose_audio = new Audio("/Audio/3DS Mii Maker.mp3")
+
+    window.addEventListener("keydown", move, false);
+    window.addEventListener("keyup", stay, false);
+    
+    draw();
+
+    function draw() {
+        animation = window.requestAnimationFrame(draw);
+        let now = Date.now();
+        let elapsed = now - then;
+        if (elapsed <= fpsInterval) {
+            return;
+        }
+        then = now - (elapsed % fpsInterval);
+
+        if (asteroids.length < 10) {
+            let a = {
+                x : canvas.width,
+                y : randint(0, canvas.height),
+                size : randint(5, 7),
+                xChange : randint(-3, -1),
+                yChange : 0
+            };
+        asteroids.push(a);
+        }
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Create player
+        context.fillStyle = "cyan";
+        context.fillRect(player.x, player.y, player.size, player.size)
+    
+        // Create asteroids
+        context.fillStyle = "red";
+        for (let a of asteroids) {
+            context.fillRect(a.x, a.y, a.size, a.size);
+        }
+
+        // Wins the game
+        if (player.x + player.size >= canvas.width) {
+            let win_sign = document.createElement("h1");
+            win_sign.style.cssText = "position:absolute;width:50vw;height:fit-content;justify-self:center;font-size:600%;color:red;background:white;border:5px solid gold;filter:drop-shadow(0 0 1em yellow);animation: win_a 7s;animation-fill-mode:forwards;text-align:center;border-radius:500px;padding: 1%;transition:5s";
+            win_sign.setAttribute("id", "win_sign")
+            win_sign.innerHTML = "WIN!"
+
+            document.querySelector("body").appendChild(win_sign);
+            win();
+            stop();  // Run stop function to stop the animation
+            return;
+        }
+
+        // Loses the game
+        for (let a of asteroids) {
+            if (player_collides(a)) {
+                lose();
+                stop();
+                return;
+            }
+        }
+
+        // Move initial set of asteroids back to the start instead of creating new ones
+        for (let a of asteroids) {
+            if (a.x + a.size < 0) {
+                a.x = canvas.width;
+                a.y = randint(0, canvas.height);
+            }
+            else {
+                a.x += a.xChange;
+                a.y += a.yChange;
+            }
+        }
+
+        // MOVING PLAYER
+        if (moveRight) {
+            player.x += player.xChange;
+        }
+        if (moveLeft) {
+            player.x -= player.xChange;
+        }
+        if (moveUp) {
+            player.y -= player.yChange;
+        }
+        if (moveDown) {
+            player.y += player.yChange;
+        }
+    
+    }
+    function move(event) {
+        let key = event.key;
+        if (key === "ArrowLeft") {
+            moveLeft = true;
+        }
+        if (key === "ArrowRight") {
+            moveRight = true;
+        }
+        if (key === "ArrowUp") {
+            moveUp = true;
+        }
+        if (key === "ArrowDown") {
+            moveDown = true;
+        }
+    }
+    function stay(event) {
+        let key = event.key;
+        if (key === "ArrowLeft") {
+            moveLeft = false;
+        }
+        if (key === "ArrowRight") {
+            moveRight = false;
+        }
+        if (key === "ArrowUp") {
+            moveUp = false;
+        }
+        if (key === "ArrowDown") {
+            moveDown = false;
+        }
+    }
+
+    function player_collides(a) {
+        if (player.x + player.size < a.x || a.x + a.size < player.x || player.y > a.y + a.size || a.y > player.y + player.size) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+
+    function stop() {
+        window.removeEventListener("keydown", move, false);
+        window.removeEventListener("keyup", stay, false);
+        window.cancelAnimationFrame(animation);
+
+        let retry_button = document.getElementById("retry");
+        
+        if (retry_button == null) {
+            retry_button = document.createElement("h1");
+            let body = document.querySelector("body"); 
+            body.insertBefore(retry_button, canvas);
+            retry_button.innerHTML = "Retry";
+            retry_button.setAttribute("id", "retry");
+        }
+        console.log("Trying to show retry button")
+        retry_button.style.cssText = "opacity:1;"
+        retry_button.addEventListener("click", retry, false);  /* PLEASE NOTE THAT THERE ARE NO BRACKETS AFTER THE FUNCTION NAME. IF THERE WERE, IT WOULD INVOKE THE FUNCTION WITHOUT EVEN NEEDING A KEY */ 
+    }
+
+    function win() {
+        if (!background_audio.paused) {
+            console.log("Attempting to pause background_audio");
+            background_audio.pause();
+        }
+        if (win_audio.paused) {
+            console.log("Attempting to play win_audio");
+            win_audio.play();
+    }
+    }
+    function lose() {
+        if (!background_audio.paused) {
+            console.log("Attempting to pause background_audio");
+            background_audio.pause();
+        }
+        if (lose_audio.paused) {
+            console.log("Attempting to play lose_audio");
+            lose_audio.play();
+    }
+    }
+    function retry() {
+        if (!background_audio.paused) {
+            console.log("Attempting to pause background_audio from retry()");
+            background_audio.pause();
+        }
+        if (!lose_audio.paused) {
+            console.log("Attempting to pause lose_audio from retry()");
+            lose_audio.pause();
+        }
+        if (!win_audio.paused) {
+                console.log("Attempting to pause win_audio from retry()");
+                win_audio.pause();
+        }
+
+        let retry_button = document.getElementById("retry");
+        retry_button.removeEventListener("click", retry, false);
+        retry_button.style.opacity = "0"
+        third();
+    }
+
+}
+
+function fourth() {
+    // Lab 7
+
+    // document.querySelector("html").setAttribute("id", "new_html")
+    // document.querySelector("canvas").style.backgroundColor = "white"
+    // document.querySelector("canvas").style.width = "80vh"
+    // document.querySelector("canvas").style.height = "80vh"
+    // or
+    document.querySelector("html").style.cssText = "background: black; color: red; margin: 0;"
+    document.querySelector("canvas").style.cssText = "background-color: white; width: 80vh; height: 80vh;"
+    // Note that the .style.cssText property overwrites any previous styles set on the element, so you should include all styles you want to set in the same string.
+
+    let threshold = 25;
+    let points = [];
+
+    draw()
+
+    function draw() {
+        window.requestAnimationFrame(draw);
+        fpsInterval = 1;
+        let now = Date.now();
+        let elapsed = now - then;
+        if (elapsed <= fpsInterval) {
+            return;
+    }
+    then = now - (elapsed % fpsInterval); 
+
+        let q = {
+            x : randint(0, canvas.width),
+            y : randint(0, canvas.width)
+        }
+        points.push(q);
+        if (points.length > 0) {
+        for (let p of points) {
+            let distance = Math.sqrt((p.x-q.x)*(p.x-q.x)+(p.y-q.y)*(p.y-q.y));
+            if (distance < threshold) {
+                // context.strokeStyle = "#0000" + randint(0, 9) + randint(0, 9)
+                context.strokeStyle = "black";
+                context.beginPath();
+                context.lineWidth = 5/distance;
+                context.moveTo(p.x, p.y);
+                context.lineTo(q.x, q.y);
+                context.stroke();
+            }
+        }
+        }
+        
+    }
+
+}
+
+function fifth() {
+    // Lecture of 10 March
+    let background_audio = new Audio("/Audio/Arroz Con Pollo.mp3");
+    background_audio.play();
+    console.log("Playing background_audio");
+
+    let player = {
+        x : 0,
+        y : 0,
+        width : 32,
+        height : 48,
+            frameX : 0,
+            frameY : 0,
+        xChange : 0,
+        yChange : 0,
+            in_air : false
+    };
+
+        let floor;
+
+    let moveLeft = false;
+    let moveRight = false;
+    let moveUp = false;
+    let moveDown = false;
+
+        let playerImage  = new Image();
+        let BackgroundImage = new Image();
+
+        let tilesPerRow = 6;
+        let tileSize = 16;
+
+        let background = [
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        ]
+
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+// DEBOUNCING ---  Waiting a certain while for the user to finish typing before reading in a value from their input
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+    }
+
+
+
+
+
+
+function randint(min, max) {
+        return Math.round(Math.random() * (max-min)) + min;
+}
