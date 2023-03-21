@@ -1,0 +1,130 @@
+html {
+    color: red;
+    margin: 0;
+    background: linear-gradient(to right, blue, rgb(255, 0, 0));
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-rows: .5fr 5fr auto 5fr .5fr;
+    grid-template-columns: 0 10fr 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+#buttons {
+    display: flex;
+    justify-content: space-evenly;
+    grid-row: 2;
+    grid-column: 1/4;
+    width: 100%;
+    height: fit-content;
+    align-self: center;
+    justify-self: center;
+}
+
+#buttons button {
+    padding: 27px;
+    border-radius: 40px;
+    border: 3px solid;
+    background: #00000059;
+    backdrop-filter: blur(12px);
+    font-size: 1.5em;
+    color: white;
+    transition: 0.5s;
+}
+button:active {
+    transform: scale(0.95);
+  }
+  
+#buttons button:hover {
+    filter: drop-shadow(0 0 0.5em white);
+}
+
+canvas {
+    grid-row: 3;
+    grid-column: 2;
+    align-self: center;
+    height: 100%;
+    width: 40%;
+    justify-self: center;
+    background: black;
+}
+
+body > h1:first-of-type {
+    grid-row: 1;
+    grid-column: 2;
+    justify-self: center;
+    font-size: 200%;
+    background: linear-gradient(to top, black, rgb(1, 0, 73));
+    width: fit-content;
+    padding: 1% 5%;
+    margin: 0;
+    align-self: stretch;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+#retry {
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    width: 100vw;
+    padding: 5% 0;
+    text-align: center;
+    transition: 0.5s;
+    filter: drop-shadow(0 0 2em red);
+    background: #ffffff3d;
+    backdrop-filter: blur(10px);
+    border: 3px solid;
+    margin: 0;
+}
+#retry:hover {
+    font-size: 400%;
+}
+
+#slower_fps, #faster_fps {
+    z-index: 1;
+}
+
+@keyframes win_a {
+    0% {
+        position: absolute;
+        top: 0;
+        font-size: 0px;
+    }
+
+    25% {
+        position: absolute;
+        top: 40%;
+        height: fit-content;
+        font-size: 600%;
+        
+    }
+
+    35% {
+        
+        transform: translateX(-5vw);
+    }
+
+    65% {
+        
+        transform: translateX(10vw);
+    }
+
+    75% {
+        top: 40%;
+        height: fit-content;
+        font-size: 700%;
+        font-weight: 900;
+    }
+
+    100% {
+        top: 200vh;
+        height: 0;
+        font-size: 0px;
+    }
+}
+  
