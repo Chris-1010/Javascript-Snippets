@@ -689,45 +689,252 @@ function fifth() {
             in_air : false
     };
 
-        let floor;
+            let floor;
 
     let moveLeft = false;
     let moveRight = false;
     let moveUp = false;
     let moveDown = false;
 
-        let playerImage  = new Image();
-        let BackgroundImage = new Image();
+            let playerImage  = new Image();
+            let BackgroundImage = new Image();
 
-        let tilesPerRow = 6;
-        let tileSize = 16;
+            let tilesPerRow = 6;
+            let tileSize = 16;
 
-        let background = [
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        ]
+            let background = [
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+                [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+                [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+            ]
 
+        floor = canvas.height - 27;
+        player.x = canvas.width / 2;
+        player.y = floor - player.height
+
+        // playerImage.src = "devil.png";  // would be used if there wasn't different positions for the player to be in
+        // backgroundImage.src = "tiles.png;"
+
+        window.addEventListener("keydown", activate, false)
+        window.addEventListener("keyup", deactivate, false)
+
+        // draw();
+            load_assets([
+                {"var": playerImage, "url": "devil.png"},
+                {"var": BackgroundImage, "url":"tiles.png"}
+            ], draw);
+        
+    function draw() {
+        window.requestAnimationFrame(draw);
+
+        let now = Date.now();
+        let elapsed = now - then;
+        if (elapsed <= fpsInterval) {
+            return;
+        }
+        then = now - (elapsed % fpsInterval);
+
+
+        // Draw background on canvas
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "#87cefa";  // Sky blue
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        // context.fillStyle = "#7cfc00";  // Grass color
+        // context.fillRect(0, floor - 10, canvas.width, canvas.height + 10 - floor);  // Needed if I wasn't using tiles
+
+        for (let r = 0; r < 20; r += 1) {
+            for (let c = 0; c < 32; c += 1) {
+                let tile = background[r][c];
+                if (tile >= 0) {
+                    let tileRow = Math.floor(tile / tilesPerRow);
+                    let tileCol = Math.floor(tile % tilesPerRow);
+                    context.drawImage(BackgroundImage,
+                                      tileCol * tileSize,
+                                      tileRow * tileSize,
+                                      tileSize,
+                                      tileSize);
+                }
+            }
+        }
+
+
+        // Draw Player
+
+        // context.fillStyle = "red";
+        // context.fillRect(player.x, player.y, player.width, player.height);
+        context.drawImage(playerImage,
+                          player.width * player.frameX,
+                          player.height * player.frameY,
+                          player.width,
+                          player.height,
+                          
+                          player.x, player.y, player.width, player.height
+        );
+
+        if ((moveLeft || moveRight) && !(moveRight && moveLeft) && !player.in_air) {
+            player.frameX = (player.frameX + 1) % 4;
+        }
+
+
+        // Draw Other Objects
+        // (Alter matrix above)
+
+
+        // Handle Key Presses
+        if (moveLeft) {
+            // player.xChange = -2;  // Linear method of moving
+            
+            player.xChange -= 0.5;  // Acceleration! Increases the distance the player is moving every time the animation is played while leftArrow is held down
+            player.frameY = 1;  // To change appearance of player when moving left
+        }
+
+        if (moveRight) {
+            // player.xChange = 2;
+
+            player.xChange += 0.5;
+            player.frameY = 2;
+        }
+
+        // Jumping!
+        if (moveUp && !player.in_air) {  // Must ensure player is not already in the air to prevent unlimited jumping
+            player.yChange -= 20;
+            player.in_air = true;
+        }
+
+
+        // Update the Player
+        player.x += player.xChange;
+        player.y += player.yChange;
+
+
+        // Update Other Objects
+        // ... //
+
+
+        // Physics
+        player.yChange += 1.5; // Gravity!
+            player.xChange = player.xChange * 0.9; // Friction!
+            player.yChange = player.yChange * 0.9; // Friction!
+
+
+        // Collisions with ground when landing from jump
+        if ( (player.y + player.height)  > floor) {
+            player.in_air = false;
+            player.y = floor - player.height;  // Ensures player stays just above ground. (player.y is the top right of the image)
+            player.yChange = 0;  // No longer falling
+        }
+
+        // Hitting the edge of the canvas
+        if (player.x + player.width < 0) {  // Hitting the left edge
+            player.x = canvas.width;  // Come back at the right edge
+        }
+        else if (player.x > canvas.width) { // Hitting the right edge
+            player.x = 0 - player.width;  // Come back at left edge
+        }
+    }
+
+    function activate(event) {  // 🟢
+        let key = event.key;
+
+        // Usual Method
+
+        // if (key === "ArrowLeft") {
+        //     moveLeft = true;
+        // }
+        // else if (key === "ArrowRight") {
+        //     moveRight = true;
+        // }
+        // else if (key === "ArrowUp") {
+        //     moveUp = true;
+        // }
+        // else if (key === "ArrowDown") {
+        //     moveDown = true;
+        // }
+
+
+        // Using Switch Statement
+
+        switch (key) {
+            case "ArrowLeft":
+                moveLeft = true;
+                break; // would go through each case until it reaches a break if this wasn't here. Therefore, each case is its own if statement. By inserting a break at the end of each one, the cases become 'else if' statements.
+            case "ArrowRight":
+                moveRight = true;
+                break;
+            case "ArrowUp":
+                moveUp = true;
+                break;
+            case "ArrowDown":
+                moveDown = true;
+                break;
+        }
+    }
+
+    function deactivate(event) { // 🔴
+        let key = event.key;
+
+
+        // Using Switch Statement
+
+        switch (key) {
+            case "ArrowLeft":
+                moveLeft = false;
+                break;
+            case "ArrowRight":
+                moveRight = false;
+                break;
+            case "ArrowUp":
+                moveUp = false;
+                break;
+            case "ArrowDown":
+                moveDown = false;
+                break;
+        }
+    }
     
-}
+
+    function load_assets(assets, callback_function) {  // Ensures assets (images/audio/etc.) are loaded before script is run
+        let number_of_assets = assets.length;
+        let loaded = function() {
+            console.log("Loaded 😊");
+            number_of_assets -= 1;
+            if (number_of_assets === 0) {
+                callback_function();  // Note that this does not call the function titled 'callback_function' but instead, the string name of a function is inserted here and the result is called
+            }
+        };
+        for (let asset of assets) {
+            let element = asset.var;
+            if (element instanceof HTMLImageElement) {
+                console.log("Image Loaded:" + element);
+                element.addEventListener("load", loaded, false);
+            }
+            else if (element instanceof HTMLAudioElement) {
+                console.log("Audio Loaded:" + element);
+                element.addEventListener("canplaythrough", loaded, false);
+            };
+            element.src = asset.url;
+        };
+    };
+};
 
 
 
