@@ -681,7 +681,7 @@ function fifth() {
         x : 0,
         y : 0,
         width : 32,
-        height : 48,
+        height : 32,
             frameX : 0,
             frameY : 0,
         xChange : 0,
@@ -695,42 +695,15 @@ function fifth() {
     let moveRight = false;
     let moveUp = false;
     let moveDown = false;
+    let getUp = false;
 
             let playerImage  = new Image();
-            let BackgroundImage = new Image();
-
-            let tilesPerRow = 6;
-            let tileSize = 16;
-
-            let background = [
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-                [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-                [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-            ]
 
         floor = canvas.height - 27;
         player.x = canvas.width / 2;
         player.y = floor - player.height
 
-        // playerImage.src = "devil.png";  // would be used if there wasn't different positions for the player to be in
+        // playerImage.src = "";  // would be used if there wasn't different positions for the player to be in
         // backgroundImage.src = "tiles.png;"
 
         window.addEventListener("keydown", activate, false)
@@ -738,8 +711,7 @@ function fifth() {
 
         // draw();
             load_assets([
-                {"var": playerImage, "url": "devil.png"},
-                {"var": BackgroundImage, "url":"tiles.png"}
+                {"var": playerImage, "url": "Assets/AnimationSheet_Character.png"},
             ], draw);
         
     function draw() {
@@ -758,23 +730,8 @@ function fifth() {
         context.fillStyle = "#87cefa";  // Sky blue
         context.fillRect(0, 0, canvas.width, canvas.height);
 
-        // context.fillStyle = "#7cfc00";  // Grass color
-        // context.fillRect(0, floor - 10, canvas.width, canvas.height + 10 - floor);  // Needed if I wasn't using tiles
-
-        for (let r = 0; r < 20; r += 1) {
-            for (let c = 0; c < 32; c += 1) {
-                let tile = background[r][c];
-                if (tile >= 0) {
-                    let tileRow = Math.floor(tile / tilesPerRow);
-                    let tileCol = Math.floor(tile % tilesPerRow);
-                    context.drawImage(BackgroundImage,
-                                      tileCol * tileSize,
-                                      tileRow * tileSize,
-                                      tileSize,
-                                      tileSize);
-                }
-            }
-        }
+        context.fillStyle = "#7cfc00";  // Grass color
+        context.fillRect(0, floor - 10, canvas.width, canvas.height + 10 - floor);
 
 
         // Draw Player
@@ -791,7 +748,12 @@ function fifth() {
         );
 
         if ((moveLeft || moveRight) && !(moveRight && moveLeft) && !player.in_air) {
-            player.frameX = (player.frameX + 1) % 4;
+            player.frameY = 3;
+            player.frameX = (player.frameX + 1) % 8;
+        }
+        if (player.in_air) {
+            player.frameY = 5;
+            player.frameX = (player.frameX + 1) % 8;
         }
 
 
@@ -804,14 +766,12 @@ function fifth() {
             // player.xChange = -2;  // Linear method of moving
             
             player.xChange -= 0.5;  // Acceleration! Increases the distance the player is moving every time the animation is played while leftArrow is held down
-            player.frameY = 1;  // To change appearance of player when moving left
         }
 
         if (moveRight) {
             // player.xChange = 2;
 
             player.xChange += 0.5;
-            player.frameY = 2;
         }
 
         // Jumping!
@@ -835,9 +795,16 @@ function fifth() {
             player.xChange = player.xChange * 0.9; // Friction!
             player.yChange = player.yChange * 0.9; // Friction!
 
+        // Hits the ground
+        if ( (player.in_air) && ((player.y + player.height)  > floor)) {
+            
+            player.frameX = 0;
+            player.frameY = 0;
+        }
+
 
         // Collisions with ground when landing from jump
-        if ( (player.y + player.height)  > floor) {
+        if ( (player.y + player.height)  > floor) {  // Note that greater than here means the player has gone underneath the floor
             player.in_air = false;
             player.y = floor - player.height;  // Ensures player stays just above ground. (player.y is the top right of the image)
             player.yChange = 0;  // No longer falling
@@ -850,28 +817,19 @@ function fifth() {
         else if (player.x > canvas.width) { // Hitting the right edge
             player.x = 0 - player.width;  // Come back at left edge
         }
+
+        if (getUp) {
+            console.log("Getting up")
+            player.frameX -= 1;
+                    if (player.frameX === -1) {
+                        getUp = false;
+                        player.frameX = 0;
+                    }
+        }
     }
 
     function activate(event) {  // 🟢
         let key = event.key;
-
-        // Usual Method
-
-        // if (key === "ArrowLeft") {
-        //     moveLeft = true;
-        // }
-        // else if (key === "ArrowRight") {
-        //     moveRight = true;
-        // }
-        // else if (key === "ArrowUp") {
-        //     moveUp = true;
-        // }
-        // else if (key === "ArrowDown") {
-        //     moveDown = true;
-        // }
-
-
-        // Using Switch Statement
 
         switch (key) {
             case "ArrowLeft":
@@ -885,6 +843,12 @@ function fifth() {
                 break;
             case "ArrowDown":
                 moveDown = true;
+
+                player.frameY = 7
+                player.frameX += 1;
+                if (player.frameX === 8) {
+                    player.frameX = 7;
+                }
                 break;
         }
     }
@@ -906,11 +870,17 @@ function fifth() {
                 moveUp = false;
                 break;
             case "ArrowDown":
+                console.log("Reached here")
                 moveDown = false;
+                
+                getUp = true;
                 break;
         }
+
+
     }
     
+
 
     function load_assets(assets, callback_function) {  // Ensures assets (images/audio/etc.) are loaded before script is run
         let number_of_assets = assets.length;
