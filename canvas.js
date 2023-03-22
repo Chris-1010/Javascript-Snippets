@@ -17,6 +17,7 @@ function init() {
 
     canvas = document.querySelector("canvas");  // Looks for the tag 'canvas'
     context = canvas.getContext("2d");
+    context.imageSmoothingEnabled = false;
 
     let buttons = document.querySelectorAll("button");
     for (let button of buttons) {
@@ -696,6 +697,7 @@ function fifth() {
     let moveUp = false;
     let moveDown = false;
     let getUp = false;
+    // let turned = false;
 
             let playerImage  = new Image();
 
@@ -738,14 +740,30 @@ function fifth() {
 
         // context.fillStyle = "red";
         // context.fillRect(player.x, player.y, player.width, player.height);
-        context.drawImage(playerImage,
-                          player.width * player.frameX,
-                          player.height * player.frameY,
-                          player.width,
-                          player.height,
-                          
-                          player.x, player.y, player.width, player.height
-        );
+        // if (turned) {
+        //     context.save();
+        //     context.scaleX = -1;
+
+        //     context.drawImage(playerImage,
+        //                     player.width * player.frameX,
+        //                     player.height * player.frameY,
+        //                     player.width,
+        //                     player.height,
+                            
+        //                     player.x, player.y, player.width, player.height
+            
+        //     );
+        //     context.restore()
+        //     } else {
+            context.drawImage(playerImage,
+                            player.width * player.frameX,
+                            player.height * player.frameY,
+                            player.width,
+                            player.height,
+                            
+                            player.x, player.y, player.width, player.height
+            );
+            // }
 
         if ((moveLeft || moveRight) && !(moveRight && moveLeft) && !player.in_air) {
             player.frameY = 3;
@@ -780,15 +798,19 @@ function fifth() {
             player.in_air = true;
         }
 
+        // Crouch
+        if (moveDown) {
+            player.frameY = 4;
+            player.frameX += 1;
+            if (player.frameX === 4) {
+                player.frameX = 3;
+            }
+        }
+
 
         // Update the Player
         player.x += player.xChange;
         player.y += player.yChange;
-
-
-        // Update Other Objects
-        // ... //
-
 
         // Physics
         player.yChange += 1.5; // Gravity!
@@ -832,8 +854,9 @@ function fifth() {
         let key = event.key;
 
         switch (key) {
-            case "ArrowLeft":
+            case "ArrowLeft":                
                 moveLeft = true;
+                // turned = true;
                 break; // would go through each case until it reaches a break if this wasn't here. Therefore, each case is its own if statement. By inserting a break at the end of each one, the cases become 'else if' statements.
             case "ArrowRight":
                 moveRight = true;
@@ -842,13 +865,10 @@ function fifth() {
                 moveUp = true;
                 break;
             case "ArrowDown":
-                moveDown = true;
-
-                player.frameY = 7
-                player.frameX += 1;
-                if (player.frameX === 8) {
-                    player.frameX = 7;
+                if (moveDown == false) {
+                player.frameX = 0;
                 }
+                moveDown = true;
                 break;
         }
     }
@@ -862,6 +882,7 @@ function fifth() {
         switch (key) {
             case "ArrowLeft":
                 moveLeft = false;
+                // turned = false;
                 break;
             case "ArrowRight":
                 moveRight = false;
